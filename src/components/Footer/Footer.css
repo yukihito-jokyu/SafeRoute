@@ -1,0 +1,16 @@
+.footer {
+    position: fixed; /* ← 追加: 常に画面下に表示 */
+    bottom: 0;        /* ← 追加: 下に固定 */
+    left: 0;          /* ← 追加: 左端に配置 */
+    width: 100%;
+    height: 60px;     /* ← 任意: 高さを明示 */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; /* ボタン間を均等に */
+    align-items: center; /* 縦方向の中央揃え */  
+    background-color: #fff;  /* ← 任意: 背景色 */
+    border-top: 1px solid #ccc; /* ← 任意: 上に線 */
+    z-index: 1000;           /* ← 任意: 上に重ねる */
+    padding: 0 0px;         /* ← 任意: 横の余白 */
+  }
+  
