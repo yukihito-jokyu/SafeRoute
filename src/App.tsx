@@ -1,25 +1,19 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+
 import './App.css';
-import { Button } from './components/Button/Button';
+import { Footer } from './components/Footer/Footer';
 
 function App() {
-  const [choiced, setChoiced] = useState(false);
-
-  const handleClick = () => {
-    setChoiced(!choiced);
-  };
+  
 
   return (
-    <>
-      <Button
-        label="ホーム"
-        icon={<img src={reactLogo} alt="React Logo" width={20} height={20} />}
-        choiced={choiced}
-        onClick={handleClick}
-      />
-    </>
+    <div className="app">
+      {/* 中身（例えばページ内容） */}
+      <div className="content">
+        
+      </div>
+      <Footer />
+      
+    </div>
   );
 }
 

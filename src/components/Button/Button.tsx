@@ -3,20 +3,20 @@ import './Button.css';
 
 type ButtonProps = {
   label: string;
-  icon?: React.ReactNode; // SVGなどReact要素で受け取る
+  iconName: string; // ファイル名だけ受け取る（例: "Home.png"）
   choiced?: boolean;
   onClick: () => void;
 };
 
-export const Button: React.FC<ButtonProps> = ({ label, icon, choiced = false, onClick }) => {
+export const Button: React.FC<ButtonProps> = ({ label, iconName, choiced = false, onClick }) => {
+  const iconSrc = `/${iconName}`; // publicフォルダ内の画像に対応
+
   return (
     <button
       className={`custom-button ${choiced ? 'choiced' : ''}`}
       onClick={onClick}
     >
-      {icon && <span className="icon">{icon}</span>}
-      <span className="label">{label}</span>
+      <img src={iconSrc} alt={label} className="icon" />
     </button>
   );
 };
-
