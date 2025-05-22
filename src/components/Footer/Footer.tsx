@@ -9,13 +9,13 @@ export const Footer = () => {
     setSelectedButton(index);
   };
 
-  // ラベルとアイコンファイル名のペア
+  // PNG → SVG へ変更済み
   const buttons = [
-    { label: 'ホーム', iconName: 'Home.png' },
-    { label: '備蓄品', iconName: 'Map.png' },
-    { label: 'レーダー', iconName: 'Shina.png' },
-    { label: '防災マップ', iconName: 'Lader.png' },
-    { label: 'マイルート', iconName: 'Rute.png' }, // 必要に応じて置き換えてください
+    { label: 'ホーム', iconName: 'home.svg' },
+    { label: '備蓄品', iconName: 'map.svg' },
+    { label: 'レーダー', iconName: 'bichi.svg' },
+    { label: '防災マップ', iconName: 'reder.svg' },
+    { label: 'マイルート', iconName: 'rute.svg' },
   ];
 
   return (

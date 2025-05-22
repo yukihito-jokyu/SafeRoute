@@ -3,13 +3,13 @@ import './Button.css';
 
 type ButtonProps = {
   label: string;
-  iconName: string; // ファイル名だけ受け取る（例: "Home.png"）
+  iconName: string; // 例: "home.svg"
   choiced?: boolean;
   onClick: () => void;
 };
 
 export const Button: React.FC<ButtonProps> = ({ label, iconName, choiced = false, onClick }) => {
-  const iconSrc = `/${iconName}`; // publicフォルダ内の画像に対応
+  const iconSrc = `/${iconName}`; // public フォルダ直下の画像参照
 
   return (
     <button
@@ -17,6 +17,7 @@ export const Button: React.FC<ButtonProps> = ({ label, iconName, choiced = false
       onClick={onClick}
     >
       <img src={iconSrc} alt={label} className="icon" />
+      <span className="label">{label}</span> {/* ← ラベル表示を追加 */}
     </button>
   );
 };
