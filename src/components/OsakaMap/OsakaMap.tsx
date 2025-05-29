@@ -40,10 +40,10 @@ if (ORS_API_KEY) {
 const defaultPosition: LatLng = new LatLng(34.6851, 135.5130); // 大阪駅周辺 (例)
 
 // プロファイルの型を定義
-type RoutingProfile = 'foot-walking' | 'wheelchair' | 'driving-car'; // 必要に応じて拡張
+type RoutingProfile = 'foot-walking' | 'wheelchair' | 'cycling-regular'; // 必要に応じて拡張
 
 
-const OsakaMap = () => {
+export const OsakaMap = () => {
   const [startPoint, setStartPoint] = useState<LatLng | null>(null);
   const [endPoint, setEndPoint] = useState<LatLng | null>(null);
   const [route, setRoute] = useState<LatLng[] | null>(null); // L.LatLng[] を使用
@@ -153,7 +153,7 @@ const OsakaMap = () => {
           <select id="profile" value={profile} onChange={handleProfileChange}>
             <option value="foot-walking">歩き</option>
             <option value="wheelchair">車いす</option>
-            <option value="driving-car">自動車</option> {/* 例として追加 */}
+            <option value="cycling-regular">自転車</option> {/* 例として追加 */}
           </select>
         </div>
         <button onClick={calculateRoute} disabled={!startPoint || !endPoint || !ors}>
@@ -191,5 +191,3 @@ const OsakaMap = () => {
     </div>
   )
 }
-
-export default OsakaMap
