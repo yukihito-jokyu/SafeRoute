@@ -1,0 +1,233 @@
+/* Settings.module.css */
+.pageContainer {
+  padding: 16px;
+  background-color: #f0f2f5; /* やや落ち着いた背景 */
+  min-height: 100vh;
+  font-family: 'Noto Sans JP', sans-serif; /* 日本語フォントを指定してみる */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: #1d3557; /* 濃い青 */
+}
+
+.mainContent {
+  max-width: 600px; /* 設定ページは中央に寄せることも考慮 */
+  margin: 0 auto;
+}
+
+.section {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.section h2 {
+  font-size: 1.4rem;
+  color: #457b9d; /* やや明るい青 */
+  margin-top: 0;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  font-size: 0.95rem;
+  color: #495057;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.inputField {
+  width: calc(100% - 22px); /* padding考慮 */
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.inputField:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.staticInfo {
+  font-size: 1rem;
+  color: #333;
+  padding: 8px 0;
+  margin: 0;
+}
+
+.inlineButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0 5px;
+  font-size: 0.9rem;
+}
+
+.toggleGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+.toggleGroup:last-child {
+  border-bottom: none;
+}
+
+.toggleLabel {
+  font-size: 1rem;
+  color: #343a40;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px; /* トグルスイッチの幅 */
+  height: 28px; /* トグルスイッチの高さ */
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 28px; /* 高さに合わせる */
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px; /* 丸の高さ */
+  width: 20px;  /* 丸の幅 */
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+  background-color: #2196F3; /* ONの時の色 */
+}
+
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(22px); /* 丸の移動距離 */
+}
+
+.descriptionText {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.statusText {
+  font-size: 0.95rem;
+  color: #17a2b8;
+  margin-bottom: 10px;
+}
+
+.actionButton {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+.actionButton:hover {
+  background-color: #4cae4c;
+}
+.actionButton:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+}
+
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.linkList li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+.linkList li:last-child {
+  border-bottom: none;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: 1rem;
+  width: 100%;
+  text-align: left;
+}
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+.logoutButton {
+    color: #dc3545; /* 赤色で目立たせる */
+    font-weight: bold;
+}
+
+.saveAllButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
+.saveAllButton:hover {
+  background-color: #0056b3;
+}
