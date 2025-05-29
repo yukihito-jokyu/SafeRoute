@@ -1,0 +1,15 @@
+.footer {
+  position: fixed;           /* 常に画面の同じ位置に表示 */
+  bottom: 0;                 /* 画面下に固定 */
+  left: 0;                   /* 左端に寄せる */
+  width: 100%;               /* 横幅いっぱいに広げる */
+  height: 60px;              /* 高さを指定 */
+  display: flex;             /* フレックスボックスで配置 */
+  flex-direction: row;       /* 横並び */
+  justify-content: space-around; /* ボタンを等間隔に配置 */
+  align-items: center;       /* 高さ方向の中央にボタンを揃える */
+  background-color: #fff;    /* 背景色を白に */
+  border-top: 1px solid #ccc;/* 上に区切り線 */
+  z-index: 1000;             /* 他要素より前に表示されるように */
+  padding: 0 0px;            /* 横方向の余白（今は0） */
+}
