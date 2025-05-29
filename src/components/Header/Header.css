@@ -1,0 +1,35 @@
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: #009378;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between; /* ← 左・中央・右に分布 */
+    padding: 0 16px 8px 16px;
+    z-index: 1000;
+  }
+  
+  /* 左の空要素（タイトルを中央に押し出すため） */
+  .header-spacer {
+    width: 28px; /* アイコンと同じ幅にしてバランスを取る */
+  }
+  
+  .header-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+  }
+  
+  .header-icon {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+  }
+  
