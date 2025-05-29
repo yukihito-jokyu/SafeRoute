@@ -1,0 +1,149 @@
+/* Points.module.css */
+.pageContainer {
+  padding: 16px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: #343a40;
+}
+
+.section {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  color: #495057;
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
+}
+
+.totalPointsSection {
+  text-align: center;
+}
+
+.totalPointsDisplay {
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #007bff;
+  margin: 10px 0;
+}
+
+.historyList, .rewardList {
+  list-style: none;
+  padding: 0;
+}
+
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f3f5;
+}
+.historyItem:last-child {
+  border-bottom: none;
+}
+
+.historyDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.historyDate {
+  font-size: 0.8rem;
+  color: #868e96;
+  margin-bottom: 4px;
+}
+
+.historyReason {
+  font-size: 1rem;
+  color: #343a40;
+}
+
+.historyPoints {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.earned .historyPoints {
+  color: #28a745; /* 緑 */
+}
+
+.used .historyPoints {
+  color: #dc3545; /* 赤 */
+}
+
+
+.rewardItem {
+  background-color: #fdfdfd;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rewardInfo h3 {
+  font-size: 1.2rem;
+  color: #0056b3;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.rewardCategory {
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #6c757d;
+}
+
+.rewardDescription {
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.rewardPointsRequired {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #17a2b8; /* 情報を示す青緑系 */
+  margin-bottom: 12px;
+}
+
+.exchangeButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: flex-end; /* ボタンを右下に配置 */
+}
+
+.exchangeButton:hover {
+  background-color: #0056b3;
+}
+
+.exchangeButton:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+}
