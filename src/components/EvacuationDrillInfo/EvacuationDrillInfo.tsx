@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './EvacuationDrillInfo.module.css';
+import { useNavigate } from 'react-router-dom';
 
 // 仮のデータ型定義
 interface Drill {
@@ -63,6 +64,12 @@ const EvacuationDrillInfo: React.FC = () => {
   const closeDrillDetails = () => {
     setSelectedDrill(null);
   };
+
+  const navigate = useNavigate();
+
+  const handleMapPage = () => {
+    navigate("/training")
+  }
 
 
   return (
@@ -143,7 +150,7 @@ const EvacuationDrillInfo: React.FC = () => {
             <p><strong>対象者:</strong> {selectedDrill.targetAudience}</p>
             <p><strong>主催者:</strong> {selectedDrill.organizer}</p>
             <p><strong>獲得ポイント:</strong> {selectedDrill.points} P</p>
-            {selectedDrill.mapLink && <p><strong>地図:</strong> <a href={selectedDrill.mapLink} target="_blank" rel="noopener noreferrer">開く</a></p>}
+            {selectedDrill.mapLink && <p><strong>地図:</strong> <a onClick={handleMapPage} target="_blank" rel="noopener noreferrer">開く</a></p>}
             {selectedDrill.whatToBring && <p><strong>持ち物:</strong> {selectedDrill.whatToBring.join(', ')}</p>}
             {selectedDrill.notes && <p><strong>注意事項:</strong> {selectedDrill.notes}</p>}
             {selectedDrill.routeBonusInfo && <p><strong>ルート開拓ボーナス:</strong> {selectedDrill.routeBonusInfo}</p>}

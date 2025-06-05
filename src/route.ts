@@ -4,6 +4,7 @@ import EvacuationDrillInfo from "./components/EvacuationDrillInfo/EvacuationDril
 import MyRoutes from "./components/MyRoutes/MyRoutes";
 import Points from "./components/Points/Points";
 import Settings from "./components/Settings/Settings";
+import TrainingMap from "./components/TrainingMap/TrainingMap";
 
 export const router = createBrowserRouter([
   {
@@ -25,5 +26,9 @@ export const router = createBrowserRouter([
   {
     path: "/settings",
     Component: Settings,
+  },
+  {
+    path: "/training",
+    Component: TrainingMap,
   }
 ])
