@@ -107,8 +107,8 @@ const TrainingMap: React.FC = () => {
   const ORS_API_KEY: string | undefined = import.meta.env.VITE_REACT_APP_ORS_API_KEY;
 
   // 事前設定された開始・終了場所 (例)
-  const [predefinedStartLocation] = useState<LatLng>(new LatLng(34.6873, 135.5259)); // 例: 大阪城公園駅
-  const [predefinedEndLocation] = useState<LatLng>(new LatLng(34.6850, 135.5130));   // 例: 大阪駅
+  const [predefinedStartLocation] = useState<LatLng>(new LatLng(34.6997872, 135.4929524)); // 例: 大阪城公園駅
+  const [predefinedEndLocation] = useState<LatLng>(new LatLng(34.6997872, 135.4929524));   // 例: 大阪駅
 
   // 事前設定されたユーザープロファイル (例: 通常の歩行者)
   // これはユーザー設定や訓練シナリオによって動的に変更される可能性がある

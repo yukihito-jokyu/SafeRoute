@@ -50,9 +50,18 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const timerIntervalId = useRef<NodeJS.Timeout | null>(null);
   const watchId = useRef<number | null>(null);
+  // isNavigatingの最新値を保持するためのref
+  const isNavigatingRef = useRef<boolean>(isNavigating);
+
+  // isNavigating stateが変更されたら、refの値を更新する
+  useEffect(() => {
+    isNavigatingRef.current = isNavigating;
+  }, [isNavigating]);
 
   const [statusMessage, setStatusMessage] = useState<string>('準備完了。避難開始ボタンを押してください。');
   const [isOffRoute, setIsOffRoute] = useState<boolean>(false);
+  const [showCompletionModal, setShowCompletionModal] = useState<boolean>(false);
+  const [canCompleteEvacuation, setCanCompleteEvacuation] = useState<boolean>(false);
 
   // APIキーが変更された場合、または初回にORSインスタンスを初期化
   useEffect(() => {
@@ -119,6 +128,20 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
     }
   }, [startLocation, endLocation, userProfile, calculateAndSetRoute, isNavigating]);
 
+  const checkIfNearDestination = useCallback((currentPos: LatLng) => {
+    if (!endLocation || !currentPos) return;
+
+    const distanceToDestination = currentPos.distanceTo(endLocation);
+    console.log(distanceToDestination)
+    const arrivalThreshold = 30; // 目的地から30メートル以内なら到着とみなす
+
+    if (distanceToDestination < arrivalThreshold) {
+      setCanCompleteEvacuation(true);
+      setStatusMessage("避難場所に到着しました。避難完了ボタンを押してください。");
+    } else {
+      setCanCompleteEvacuation(false); // 遠ざかった場合などに備えてリセット
+    }
+  }, [endLocation]);
 
   const startNavigation = () => {
     if (!route) {
@@ -130,6 +153,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
     }
 
     setIsNavigating(true);
+    setCanCompleteEvacuation(false); // ナビ開始時は完了ボタンを非表示
     setElapsedTime(0);
     setStatusMessage("避難を開始しました。GPSで現在地を追跡します。");
 
@@ -146,6 +170,10 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             mapInstance.panTo(newPos); // 現在地に地図をパン
           }
           checkIfOffRoute(newPos, route);
+          console.log(isNavigating)
+          if (isNavigatingRef.current) { // ナビゲーション中のみ目的地近接チェック
+            checkIfNearDestination(newPos);
+          }
         },
         (error) => {
           console.error("GPSエラー:", error);
@@ -160,6 +188,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
 
   const stopNavigation = () => {
     setIsNavigating(false);
+    setCanCompleteEvacuation(false); // 停止時は完了ボタンを非表示
     setStatusMessage("避難を中断/終了しました。");
     if (timerIntervalId.current) {
       clearInterval(timerIntervalId.current);
@@ -170,6 +199,23 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
       watchId.current = null;
     }
     // setCurrentPosition(null); // 停止時に現在地マーカーを消す場合
+  };
+
+  const handleCompleteEvacuation = () => {
+    stopNavigation(); // タイマーとGPS追跡を停止
+    setShowCompletionModal(true);
+    setStatusMessage(`避難完了！所要時間: ${formatTime(elapsedTime)}`);
+  };
+
+  const handleSaveToMyRoute = () => {
+    // ここで実際にマイルートへ保存するロジックを実装
+    // 例: API呼び出し、ローカルストレージへの保存など
+    console.log("「マイルートに設定」がクリックされました。");
+    console.log("避難ルート:", route);
+    console.log("所要時間:", formatTime(elapsedTime));
+    setShowCompletionModal(false);
+    // 必要に応じて、保存後のフィードバックメッセージなどをsetStatusMessageで表示
+    setStatusMessage("ルートをマイルートに保存しました（仮）");
   };
 
   const checkIfOffRoute = (currentPos: LatLng, currentRoute: LatLng[] | null) => {
@@ -198,8 +244,8 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
       calculateAndSetRoute(currentPos, endLocation, userProfile);
     } else {
       setIsOffRoute(false);
-      // ナビゲーション中のメッセージを維持したい場合は、ここでのsetStatusMessageは避けるか条件分岐
-      if (isNavigating && !statusMessage.startsWith("経路を再設定しました。")) { // 再設定直後でなければ
+      // 目的地に近づいていない、かつナビゲーション中で、かつ経路再設定直後でない場合
+      if (!canCompleteEvacuation && isNavigating && !statusMessage.startsWith("経路を再設定しました。")) {
         setStatusMessage("ルート上を移動中です。");
       }
     }
@@ -238,9 +284,24 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             避難開始
           </button>
         ) : (
-          <button onClick={stopNavigation} className={`${styles.button} ${styles.stopButton}`}>
-            避難停止
-          </button>
+          <>
+            <button 
+              onClick={stopNavigation} 
+              className={`${styles.button} ${styles.stopButton}`}
+              disabled={showCompletionModal} // モーダル表示中も非活性化
+            >
+              避難中断
+            </button>
+            {canCompleteEvacuation && (
+              <button 
+                onClick={handleCompleteEvacuation} 
+                className={`${styles.button} ${styles.completeButton}`}
+                disabled={showCompletionModal} // モーダル表示中も非活性化
+              >
+                避難完了 🎉
+              </button>
+            )}
+          </>
         )}
       </div>
       <div className={styles.statusDisplay}>
@@ -256,7 +317,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* {startLocation && <Marker position={startLocation}><Popup>出発地</Popup></Marker>} */}
+        {startLocation && <Marker position={startLocation}><Popup>出発地</Popup></Marker>}
         {endLocation && <Marker position={endLocation}><Popup>避難場所</Popup></Marker>}
         {currentPosition && (
           <CircleMarker center={currentPosition} radius={8} color="blue" fillColor="blue" fillOpacity={0.8}>
@@ -265,6 +326,26 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
         )}
         {route && <Polyline positions={route} color={isOffRoute ? "red" : "green"} weight={5} />}
       </MapContainer>
+
+      {showCompletionModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2>避難完了！</h2>
+            <p>お疲れ様でした。</p>
+            <div className={styles.modalInfo}>
+              <p><strong>避難場所:</strong> {endLocation.toString()}</p>
+              <p><strong>所要時間:</strong> {formatTime(elapsedTime)}</p>
+              {/* ルートの距離なども表示する場合は、ORSのレスポンスから取得して保持しておく必要あり */}
+            </div>
+            <button onClick={handleSaveToMyRoute} className={`${styles.button} ${styles.modalButton}`}>
+              このルートをマイルートに設定
+            </button>
+            <button onClick={() => setShowCompletionModal(false)} className={`${styles.button} ${styles.modalCloseButton}`}>
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

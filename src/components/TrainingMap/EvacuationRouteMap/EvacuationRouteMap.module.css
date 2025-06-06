@@ -5,6 +5,7 @@
   width: 100%;
   height: 100%; /* 親要素の .mapPlaceholder の高さに依存 */
   background-color: #f0f0f0;
+  position: relative;
 }
 
 .warningBanner {
@@ -57,10 +58,19 @@
 }
 
 .stopButton {
-  background-color: #dc3545; /* 赤 */
+  background-color: #ffc107; /* 黄色系に変更（中断なので） */
+  color: #212529;
 }
 .stopButton:not(:disabled):hover {
-  background-color: #c82333;
+  background-color: #e0a800;
+}
+
+/* 新しい避難完了ボタンスタイル */
+.completeButton {
+  background-color: #007bff; /* 青系 */
+}
+.completeButton:not(:disabled):hover {
+  background-color: #0056b3;
 }
 
 .statusDisplay {
@@ -82,4 +92,64 @@
 /* react-leafletのデフォルトスタイルを上書きする場合など */
 .mapView .leaflet-control-container .leaflet-control-attribution {
   font-size: 10px; /*帰属表示が小さいほうが見やすい場合*/
+}
+
+/* --- モーダル関連スタイル --- */
+.modalOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* マップより手前に表示 */
+}
+
+.modalContent {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px; /* スマホでの最大幅 */
+  text-align: center;
+}
+
+.modalContent h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.modalInfo {
+  margin: 15px 0;
+  text-align: left;
+  font-size: 1em;
+  line-height: 1.6;
+}
+.modalInfo p {
+  margin: 5px 0;
+}
+
+.modalButton { /* モーダル内の主要ボタン */
+  background-color: #28a745; /* 緑 */
+  display: block;
+  width: calc(100% - 20px);
+  margin: 15px auto 10px;
+}
+.modalButton:hover {
+  background-color: #218838;
+}
+
+.modalCloseButton { /* モーダルの閉じるボタン */
+  background-color: #6c757d; /* グレー */
+  display: block;
+  width: calc(100% - 20px);
+  margin: 10px auto 0;
+}
+.modalCloseButton:hover {
+  background-color: #5a6268;
 }
