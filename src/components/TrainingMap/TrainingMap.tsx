@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TrainingMap.module.css';
 import EvacuationRouteMap from './EvacuationRouteMap/EvacuationRouteMap';
-import L, { LatLng } from 'leaflet';
+import { LatLng } from 'leaflet';
 
 // --- 型定義 ---
 interface PointExchangeItem {
@@ -28,11 +28,11 @@ interface Badge {
   icon?: string; // アイコン画像のパスなど
 }
 
-interface RankingEntry {
-  rank: number;
-  userName: string; // 匿名化された名前
-  value: string; // 例: "30分", "2.5km", "評価スコア: 95"
-}
+// interface RankingEntry {
+//   rank: number;
+//   userName: string; // 匿名化された名前
+//   value: string; // 例: "30分", "2.5km", "評価スコア: 95"
+// }
 
 interface SupportExperience {
   id: string;
@@ -123,7 +123,7 @@ const TrainingMap: React.FC = () => {
   const handleSubmitRoute = (routeId: string) => {
     alert(`ルートID: ${routeId} の提出処理は未実装です。`);
     // TODO: 実際にはAPIを呼び出してルートを提出し、ポイントを加算する
-    // setCurrentPoints(prev => prev + 100); // 例: 100ポイント加算
+    setCurrentPoints(prev => prev + 100); // 例: 100ポイント加算
   };
 
   const handleRegisterNewRoute = () => {

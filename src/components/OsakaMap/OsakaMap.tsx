@@ -49,6 +49,7 @@ export const OsakaMap = () => {
   const [route, setRoute] = useState<LatLng[] | null>(null); // L.LatLng[] を使用
   const [profile, setProfile] = useState<RoutingProfile>('foot-walking');
   const [map, setMap] = useState<LeafletMap | null>(null); // map インスタンスを保持
+  setMap(null);
 
   const handleMapClick = (event: LeafletMouseEvent): void => {
     if (!startPoint) {
@@ -85,8 +86,7 @@ export const OsakaMap = () => {
           [endPoint.lng, endPoint.lat]
         ],
         profile: profile,
-        format: 'geojson', // GeoJSON 形式は Leaflet で扱いやすい
-        language: 'ja', // 結果を日本語で取得する場合（地名など）
+        format: 'geojson', // 結果を日本語で取得する場合（地名など）
         // preference: 'fastest' // 例: 最速ルートを優先 (openrouteservice-js のオプションによる)
       }) as OrsDirectionsResponse; // キャスト (ライブラリの型と一致させる)
 
