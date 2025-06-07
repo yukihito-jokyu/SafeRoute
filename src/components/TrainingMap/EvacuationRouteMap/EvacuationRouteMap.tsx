@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L, { LatLng, LeafletMouseEvent, Map as LeafletMap } from 'leaflet';
+import L, { LatLng, Map as LeafletMap } from 'leaflet';
 import Openrouteservice from 'openrouteservice-js';
 import styles from './EvacuationRouteMap.module.css';
 
@@ -18,7 +18,7 @@ L.Icon.Default.mergeOptions({
 type RoutingProfile = 'foot-walking' | 'wheelchair'; // 避難訓練で想定されるプロファイル
 
 interface OrsFeature extends GeoJSON.Feature<GeoJSON.LineString | GeoJSON.Point> {
-  properties?: any;
+  properties: any;
 }
 interface OrsDirectionsResponse extends GeoJSON.FeatureCollection<GeoJSON.LineString | GeoJSON.Point> {
   features: OrsFeature[];
@@ -93,9 +93,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
           [end.lng, end.lat]
         ],
         profile: profile,
-        format: 'geojson',
-        language: 'ja',
-        instructions: false, // 指示は不要なため無効化
+        format: 'geojson', // 指示は不要なため無効化
       }) as OrsDirectionsResponse;
 
       if (response.features && response.features.length > 0 && response.features[0].geometry.type === 'LineString') {
