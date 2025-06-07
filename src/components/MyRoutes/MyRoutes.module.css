@@ -1,0 +1,241 @@
+/* MyRoutes.module.css */
+.pageContainer {
+  padding: 16px;
+  background-color: #f4f6f8;
+  min-height: 100vh;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.section {
+  background-color: #fff;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.recordButton, .pauseButton, .stopButton, .saveButton, .cancelButton {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.recordButton {
+  background-color: #2ecc71; /* 明るい緑 */
+}
+.recordButton:hover {
+  background-color: #27ae60;
+}
+
+.recordingControls p {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #e67e22;
+}
+
+.pauseButton {
+  background-color: #f39c12; /* オレンジ */
+}
+.pauseButton:hover {
+  background-color: #e67e22;
+}
+
+.stopButton {
+  background-color: #e74c3c; /* 赤 */
+}
+.stopButton:hover {
+  background-color: #c0392b;
+}
+
+.newRouteForm {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+.newRouteForm h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+.inputField, .textareaField {
+    width: calc(100% - 22px); /* padding考慮 */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+.textareaField {
+    min-height: 80px;
+    resize: vertical;
+}
+.saveButton {
+    background-color: #3498db; /* 青 */
+}
+.saveButton:hover {
+    background-color: #2980b9;
+}
+.cancelButton {
+    background-color: #95a5a6; /* グレー */
+}
+.cancelButton:hover {
+    background-color: #7f8c8d;
+}
+
+
+.routeList {
+  list-style: none;
+  padding: 0;
+}
+
+.routeItem {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #fdfdfd;
+}
+
+.routeItem h3 {
+  font-size: 1.2rem;
+  color: #3498db;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.mapPreview {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+.routeItem p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  margin: 4px 0;
+}
+
+.routeActions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.actionButton {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-grow: 1; /* ボタンが均等に広がるように */
+  min-width: 120px; /* 最低幅 */
+}
+.actionButton:hover {
+  background-color: #95a5a6;
+}
+
+.share {
+  background-color: #1abc9c;
+  color: white;
+}
+.share:hover {
+  background-color: #16a085;
+}
+.unshare {
+  background-color: #e67e22;
+  color: white;
+}
+.unshare:hover {
+  background-color: #d35400;
+}
+
+.fullWidthButton {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  background-color: #9b59b6; /* 紫系 */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 15px;
+}
+.fullWidthButton:hover {
+  background-color: #8e44ad;
+}
+
+.rankingTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+.rankingTable th, .rankingTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.rankingTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.rankingTable td:nth-child(1), /* 順位 */
+.rankingTable td:nth-child(3), /* 開拓数 */
+.rankingTable td:nth-child(4) { /* 総距離 */
+    text-align: center;
+}
+
+.userReports {
+    font-size: 0.85rem;
+    margin-top: 8px;
+    padding: 8px;
+    background-color: #fff8e1; /* 薄い黄色 */
+    border: 1px solid #ffecb3; /* 黄色系のボーダー */
+    border-radius: 4px;
+}
+.userReports strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #c77a00;
+}
+.userReports ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 0;
+    color: #555;
+}
