@@ -239,6 +239,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
       setIsOffRoute(true);
       setStatusMessage("ルートを外れました。経路を再検索します...");
       // 自動でリルート: 現在地から目的地までの経路を再計算
+      console.log("koko")
       calculateAndSetRoute(currentPos, endLocation, userProfile);
     } else {
       setIsOffRoute(false);

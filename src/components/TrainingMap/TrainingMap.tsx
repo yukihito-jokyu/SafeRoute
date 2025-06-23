@@ -108,7 +108,7 @@ const TrainingMap: React.FC = () => {
 
   // 事前設定された開始・終了場所 (例)
   const [predefinedStartLocation] = useState<LatLng>(new LatLng(34.6997872, 135.4929524)); // 例: 大阪城公園駅
-  const [predefinedEndLocation] = useState<LatLng>(new LatLng(34.6997872, 135.4929524));   // 例: 大阪駅
+  const [predefinedEndLocation] = useState<LatLng>(new LatLng(34.6864668, 135.5249972));   // 例: 大阪駅
 
   // 事前設定されたユーザープロファイル (例: 通常の歩行者)
   // これはユーザー設定や訓練シナリオによって動的に変更される可能性がある
