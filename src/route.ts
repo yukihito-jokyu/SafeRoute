@@ -5,6 +5,7 @@ import MyRoutes from "./components/MyRoutes/MyRoutes";
 import Points from "./components/Points/Points";
 import Settings from "./components/Settings/Settings";
 import TrainingMap from "./components/TrainingMap/TrainingMap";
+import TestApi from "./components/Test/TestApi";
 
 export const router = createBrowserRouter([
   {
@@ -30,5 +31,9 @@ export const router = createBrowserRouter([
   {
     path: "/training",
     Component: TrainingMap,
+  },
+  {
+    path: "/test",
+    Component: TestApi,
   }
 ])
