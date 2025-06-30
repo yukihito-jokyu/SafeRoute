@@ -153,3 +153,67 @@
 .modalCloseButton:hover {
   background-color: #5a6268;
 }
+
+/* --- ここから追記 --- */
+
+/* ========== ▼ ドロップダウンメニュー用のスタイル ▼ ========== */
+
+/* ドロップダウン全体のコンテナ。サブメニューの位置の基準点となる */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 8px; /* 隣のボタンとの間隔調整 */
+}
+
+/* メインの「設定」ボタン */
+.menuButton {
+  background-color: #6c757d; /* 既存のボタンと区別するための色 */
+  border-color: #6c757d;
+}
+
+.menuButton:hover {
+  background-color: #5a6268;
+}
+
+/* 3つのサブボタンを格納するコンテナ */
+.dropdownContent {
+  /* 通常は非表示 */
+  max-height: 0;
+  overflow: hidden;
+  
+  /* 表示された時の位置 */
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 200px; /* メニューの幅 */
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1001; /* マップよりも手前に表示するためのz-index */
+  border-radius: 5px;
+  
+  /* 開閉アニメーション */
+  transition: max-height 0.25s ease-in-out;
+}
+
+/* JavaScriptによってこのクラスが付与されると表示される */
+.dropdownContent.show {
+  max-height: 300px; /* サブボタンが収まる十分な高さ */
+}
+
+/* ドロップダウン内の各サブボタン */
+.subButton {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block; /* ボタンを縦に並べる */
+  width: 100%;
+  text-align: left; /* 文字を左揃えに */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* サブボタンにマウスカーソルを合わせた時のスタイル */
+.subButton:hover {
+  background-color: #f1f1f1;
+}
+
+/* ========== ▲ ドロップダウンメニュー用のスタイル ▲ ========== */
