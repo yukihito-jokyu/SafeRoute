@@ -50,10 +50,8 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const timerIntervalId = useRef<NodeJS.Timeout | null>(null);
   const watchId = useRef<number | null>(null);
-  // isNavigatingの最新値を保持するためのref
   const isNavigatingRef = useRef<boolean>(isNavigating);
 
-  // isNavigating stateが変更されたら、refの値を更新する
   useEffect(() => {
     isNavigatingRef.current = isNavigating;
   }, [isNavigating]);
@@ -63,7 +61,10 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   const [showCompletionModal, setShowCompletionModal] = useState<boolean>(false);
   const [canCompleteEvacuation, setCanCompleteEvacuation] = useState<boolean>(false);
 
-  // APIキーが変更された場合、または初回にORSインスタンスを初期化
+  // --- ▼ 変更点 1/2: ドロップダウンメニューの開閉状態を管理するstateを追加 ---
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // --- ▲ 変更点 1/2 ---
+
   useEffect(() => {
     if (apiKey) {
       ors = new Openrouteservice.Directions({ api_key: apiKey });
@@ -93,7 +94,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
           [end.lng, end.lat]
         ],
         profile: profile,
-        format: 'geojson', // 指示は不要なため無効化
+        format: 'geojson',
       }) as OrsDirectionsResponse;
 
       if (response.features && response.features.length > 0 && response.features[0].geometry.type === 'LineString') {
@@ -119,9 +120,8 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   }, [mapInstance, isNavigating, currentPosition]);
 
 
-  // 初期経路計算 (propsが変更された場合も対応)
   useEffect(() => {
-    if (startLocation && endLocation && userProfile && !isNavigating) { // ナビゲーション中でなければ初期経路を計算
+    if (startLocation && endLocation && userProfile && !isNavigating) {
         calculateAndSetRoute(startLocation, endLocation, userProfile);
     }
   }, [startLocation, endLocation, userProfile, calculateAndSetRoute, isNavigating]);
@@ -131,27 +131,25 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
 
     const distanceToDestination = currentPos.distanceTo(endLocation);
     console.log(distanceToDestination)
-    const arrivalThreshold = 30; // 目的地から30メートル以内なら到着とみなす
+    const arrivalThreshold = 30;
 
     if (distanceToDestination < arrivalThreshold) {
       setCanCompleteEvacuation(true);
       setStatusMessage("避難場所に到着しました。避難完了ボタンを押してください。");
     } else {
-      setCanCompleteEvacuation(false); // 遠ざかった場合などに備えてリセット
+      setCanCompleteEvacuation(false);
     }
   }, [endLocation]);
 
   const startNavigation = () => {
     if (!route) {
       setStatusMessage("経路が設定されていません。まず経路を検索してください。");
-      calculateAndSetRoute(startLocation, endLocation, userProfile); // 開始時に経路がなければ再計算
-      // この後、routeが設定されたら再度startNavigationをユーザーが押す必要があるかもしれない。
-      // もしくは、calculateAndSetRouteが成功した後に自動でナビゲーションを開始するロジックを追加。
+      calculateAndSetRoute(startLocation, endLocation, userProfile);
       return;
     }
 
     setIsNavigating(true);
-    setCanCompleteEvacuation(false); // ナビ開始時は完了ボタンを非表示
+    setCanCompleteEvacuation(false);
     setElapsedTime(0);
     setStatusMessage("避難を開始しました。GPSで現在地を追跡します。");
 
@@ -165,11 +163,11 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
           const newPos = new LatLng(position.coords.latitude, position.coords.longitude);
           setCurrentPosition(newPos);
           if (mapInstance) {
-            mapInstance.panTo(newPos); // 現在地に地図をパン
+            mapInstance.panTo(newPos);
           }
           checkIfOffRoute(newPos, route);
           console.log(isNavigating)
-          if (isNavigatingRef.current) { // ナビゲーション中のみ目的地近接チェック
+          if (isNavigatingRef.current) {
             checkIfNearDestination(newPos);
           }
         },
@@ -186,7 +184,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
 
   const stopNavigation = () => {
     setIsNavigating(false);
-    setCanCompleteEvacuation(false); // 停止時は完了ボタンを非表示
+    setCanCompleteEvacuation(false);
     setStatusMessage("避難を中断/終了しました。");
     if (timerIntervalId.current) {
       clearInterval(timerIntervalId.current);
@@ -196,23 +194,19 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
       navigator.geolocation.clearWatch(watchId.current);
       watchId.current = null;
     }
-    // setCurrentPosition(null); // 停止時に現在地マーカーを消す場合
   };
 
   const handleCompleteEvacuation = () => {
-    stopNavigation(); // タイマーとGPS追跡を停止
+    stopNavigation();
     setShowCompletionModal(true);
     setStatusMessage(`避難完了！所要時間: ${formatTime(elapsedTime)}`);
   };
 
   const handleSaveToMyRoute = () => {
-    // ここで実際にマイルートへ保存するロジックを実装
-    // 例: API呼び出し、ローカルストレージへの保存など
     console.log("「マイルートに設定」がクリックされました。");
     console.log("避難ルート:", route);
     console.log("所要時間:", formatTime(elapsedTime));
     setShowCompletionModal(false);
-    // 必要に応じて、保存後のフィードバックメッセージなどをsetStatusMessageで表示
     setStatusMessage("ルートをマイルートに保存しました（仮）");
   };
 
@@ -222,12 +216,9 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
       return;
     }
 
-    const thresholdDistance = 50; // 50メートル以上離れたらルート逸脱とみなす
+    const thresholdDistance = 50;
     let onRoute = false;
 
-    // ルート上の各線分に対して現在地からの最短距離を計算し、閾値以下ならオンルート
-    // ここでは簡略化のため、ルート上のいずれかのポイントから一定距離以内かで判定
-    // より正確には線分への垂線の距離を計算する必要がある
     for (let i = 0; i < currentRoute.length; i++) {
       if (currentPos.distanceTo(currentRoute[i]) < thresholdDistance) {
         onRoute = true;
@@ -238,12 +229,10 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
     if (!onRoute) {
       setIsOffRoute(true);
       setStatusMessage("ルートを外れました。経路を再検索します...");
-      // 自動でリルート: 現在地から目的地までの経路を再計算
       console.log("koko")
       calculateAndSetRoute(currentPos, endLocation, userProfile);
     } else {
       setIsOffRoute(false);
-      // 目的地に近づいていない、かつナビゲーション中で、かつ経路再設定直後でない場合
       if (!canCompleteEvacuation && isNavigating && !statusMessage.startsWith("経路を再設定しました。")) {
         setStatusMessage("ルート上を移動中です。");
       }
@@ -257,7 +246,6 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   };
 
 
-  // MapContainerにmapインスタンスをセットするためのコンポーネント
   const MapInstanceSetter = () => {
     const map = useMap();
     useEffect(() => {
@@ -278,6 +266,40 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
         <div className={styles.timerDisplay}>
           経過時間: {formatTime(elapsedTime)}
         </div>
+
+        {/* --- ▼ 変更点 2/2: ここにトグルボタンのコードを挿入 --- */}
+        <div className={styles.dropdown}>
+          <button onClick={() => setIsMenuOpen(prev => !prev)} className={`${styles.button} ${styles.menuButton}`}>
+            ルート選択 ▼
+          </button>
+          <div className={`${styles.dropdownContent} ${isMenuOpen ? styles.show : ''}`}>
+            <button
+              onClick={() => {
+                // ここに「車椅子ルート切替」のロジックを実装
+                alert('車椅子ルートへの切り替え機能を実装します。');
+                setIsMenuOpen(false); // メニューを閉じる
+              }}
+              className={styles.subButton}
+            >
+              車椅子ルート切替
+            </button>
+            <button
+              onClick={() => {
+                // ここに「出発地を現在地に設定」のロジックを実装
+                alert('出発地を現在地に設定する機能を実装します。');
+                setIsMenuOpen(false);
+              }}
+              className={styles.subButton}
+            >
+              自転車ルート切替
+            </button>
+            <button onClick={() => { alert('ダミーボタンです'); setIsMenuOpen(false); }} className={styles.subButton}>
+              徒歩ルート切替
+            </button>
+          </div>
+        </div>
+        {/* --- ▲ 変更点 2/2 --- */}
+
         {!isNavigating ? (
           <button onClick={startNavigation} className={`${styles.button} ${styles.startButton}`} disabled={!route || !ors}>
             避難開始
@@ -287,7 +309,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             <button 
               onClick={stopNavigation} 
               className={`${styles.button} ${styles.stopButton}`}
-              disabled={showCompletionModal} // モーダル表示中も非活性化
+              disabled={showCompletionModal}
             >
               避難中断
             </button>
@@ -295,7 +317,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
               <button 
                 onClick={handleCompleteEvacuation} 
                 className={`${styles.button} ${styles.completeButton}`}
-                disabled={showCompletionModal} // モーダル表示中も非活性化
+                disabled={showCompletionModal}
               >
                 避難完了 🎉
               </button>
@@ -307,9 +329,9 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
         {statusMessage}
       </div>
       <MapContainer
-        center={startLocation || new LatLng(34.6851, 135.5130)} // フォールバック位置
+        center={startLocation || new LatLng(34.6851, 135.5130)}
         zoom={15}
-        className={styles.mapView} // CSSモジュールでスタイルを適用
+        className={styles.mapView}
       >
         <MapInstanceSetter />
         <TileLayer
@@ -334,7 +356,6 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             <div className={styles.modalInfo}>
               <p><strong>避難場所:</strong> {endLocation.toString()}</p>
               <p><strong>所要時間:</strong> {formatTime(elapsedTime)}</p>
-              {/* ルートの距離なども表示する場合は、ORSのレスポンスから取得して保持しておく必要あり */}
             </div>
             <button onClick={handleSaveToMyRoute} className={`${styles.button} ${styles.modalButton}`}>
               このルートをマイルートに設定
