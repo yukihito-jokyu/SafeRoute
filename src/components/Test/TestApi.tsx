@@ -1,15 +1,18 @@
-import axios from 'axios';
+import apiUsers from '@/api/users';
 
 const TestApi = () => {
+  const {
+    fetchData
+  } = apiUsers()
 
-  const fetchData = async () => {
-    const response = await axios.get('http://localhost:8080/');
-    console.log(response.data);
+  const clickIvents = async () => {
+    const response = await fetchData()
+    console.log(response)
   };
 
   return (
     <div>
-      <button onClick={fetchData}>click</button>
+      <button onClick={clickIvents}>click</button>
     </div>
   )
 }
