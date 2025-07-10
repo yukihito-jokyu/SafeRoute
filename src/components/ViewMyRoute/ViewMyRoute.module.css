@@ -1,0 +1,307 @@
+/* TrainingMap.module.css */
+.trainingMapContainer {
+  padding: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f4f8; /* 薄いグレーの背景 */
+  color: #333;
+  line-height: 1.6;
+  max-width: 600px; /* スマホ表示を意識した最大幅 */
+  margin: 0 auto; /* 中央寄せ */
+}
+
+.header {
+  background-color: #007bff; /* 例: 青系のヘッダー */
+  color: white;
+  padding: 15px 10px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 15px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.mapPlaceholder {
+  background-color: #ffffff;
+  height: 680px; /* スマホ向けに少し小さく */
+  border: 1px dashed #cccccc;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  color: #777;
+}
+
+.section {
+  background-color: #ffffff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 1.3em;
+  color: #0056b3; /* やや濃い青 */
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+.button {
+  display: block; /* ボタンをブロック要素にして幅一杯に広がりやすくする */
+  width: calc(100% - 20px); /* パディング分を引く */
+  padding: 10px 15px;
+  font-size: 1em;
+  color: #ffffff;
+  background-color: #28a745; /* 例: 緑系のボタン */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin: 10px auto; /* 中央寄せ */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #218838; /* ホバー時少し濃く */
+}
+
+.buttonPrimary {
+  background-color: #007bff;
+}
+.buttonPrimary:hover {
+  background-color: #0056b3;
+}
+
+.buttonSmall {
+  padding: 6px 10px;
+  font-size: 0.9em;
+  width: auto; /* 幅は自動 */
+  display: inline-block; /* インラインブロックに変更 */
+  margin: 5px 5px 5px 0;
+}
+
+.buttonLink { /* ボタンのような見た目のリンク */
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 0.9em;
+  margin-right: 10px;
+}
+.buttonLink:hover {
+  color: #0056b3;
+}
+
+
+.pointDisplay {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  text-align: center;
+}
+.pointDisplay strong {
+  color: #007bff;
+  font-size: 1.3em;
+}
+
+.pointExchange h3 {
+  font-size: 1.1em;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.itemList {
+  list-style: none;
+  padding: 0;
+}
+
+.exchangeItem, .routeItem, .supportExperienceItem, .testimonialItem {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.exchangeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* スマホで改行されるように */
+}
+.exchangeItem span:first-child {
+  flex-basis: 60%; /* アイテム名にスペースを多めに */
+}
+.exchangeItem span:nth-child(2) {
+  font-weight: bold;
+  margin: 5px 0;
+}
+.exchangeButton {
+  padding: 5px 10px;
+  font-size: 0.9em;
+  background-color: #ffc107; /* 黄色系 */
+  color: #333;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0; /* 縮まないように */
+}
+.exchangeButton:hover {
+  background-color: #e0a800;
+}
+
+
+.infoText {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-top: 10px;
+}
+.infoTextSmall {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.bonusInfo {
+  background-color: #e0f7fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 15px 0;
+  border-left: 3px solid #007bff;
+}
+.bonusInfo h3 {
+  margin-top: 0;
+  font-size: 1em;
+  color: #007bff;
+}
+.bonusInfo ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 0;
+  font-size: 0.9em;
+}
+
+.myRoutesSection h3, .rankingSection h3, .badgeSection h3, .awardsSection h3,
+.supportExperienceSection h3, .testimonialsSection h3, .surveySection h3 {
+  font-size: 1.1em;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.routeItemInfo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+.routeItemInfo strong {
+  font-size: 1.1em;
+  margin-bottom: 3px;
+}
+.routeItemInfo span {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 2px;
+}
+.routeItemActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* ボタンが複数ある場合折り返す */
+}
+
+
+.rankingCategory {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+.rankingCategory h4 {
+  font-size: 1em;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #333;
+}
+.rankingCategory p {
+  font-size: 0.9em;
+  margin: 3px 0;
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 可変グリッド */
+  gap: 10px;
+}
+
+.badgeItem {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+.badgeItem.achieved {
+  border-color: #28a745;
+  background-color: #e6ffed;
+}
+.badgeIcon {
+  font-size: 2em;
+  display: block;
+  margin-bottom: 5px;
+}
+.badgeName {
+  font-weight: bold;
+  font-size: 0.9em;
+  display: block;
+}
+.achievedMark {
+  font-size: 0.8em;
+  color: #28a745;
+  font-weight: bold;
+  display: block;
+}
+.badgeDescription {
+  font-size: 0.75em;
+  color: #666;
+  margin-top: 5px;
+}
+
+.awardsSection ul {
+  list-style-type: disclosure-closed; /* 絵文字やアイコンリスト風 */
+  padding-left: 20px;
+}
+.awardsSection li {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+}
+
+
+.supportExperienceItem strong, .testimonialItem strong {
+  display: block;
+  margin-bottom: 3px;
+}
+.testimonialItem p {
+  margin: 2px 0;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  padding: 15px;
+  font-size: 0.8em;
+  color: #777;
+  border-top: 1px solid #ddd;
+}
