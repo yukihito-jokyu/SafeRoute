@@ -28,7 +28,7 @@ interface SystemNotification {
 
 const Dashboard: React.FC = () => {
   // 仮のデータ
-  const currentPoints: number = 1250;
+  const currentPoints: number = 15;
   const latestDrill: LatestDrillInfo = {
     id: 'drill-001',
     name: '地域合同避難訓練2025春',
@@ -44,7 +44,6 @@ const Dashboard: React.FC = () => {
     group: '3人/5人 確認済み',
   };
   const notifications: SystemNotification[] = [
-    { id: 'sys-001', message: '新しい防災知識コンテンツが追加されました。', date: '2025/05/28' },
     { id: 'sys-002', message: '次回の定期メンテナンスは6月10日です。', date: '2025/05/25' },
   ];
 
@@ -84,7 +83,7 @@ const Dashboard: React.FC = () => {
             </span>
             <h3>{latestDrill.name}</h3>
             <p>日時: {latestDrill.date}</p>
-            <button className={styles.actionButton}>詳細を見る</button>
+            <button onClick={() => clickNav("/evacuation")} className={styles.actionButton}>詳細を見る</button>
           </div>
         </section>
 
@@ -99,11 +98,11 @@ const Dashboard: React.FC = () => {
               </li>
             ))}
           </ul>
-          <button className={styles.fullWidthButton}>マイルート一覧へ</button>
+          <button onClick={() => clickNav("/myroutes")} className={styles.fullWidthButton}>マイルート一覧へ</button>
         </section>
 
         {/* 防災知識学習コンテンツへのショートカット */}
-        <section className={styles.section}>
+        {/* <section className={styles.section}>
           <h2>防災知識学習</h2>
           <div className={styles.learningContents}>
             <button className={styles.learningButton}>地震発生時の初動</button>
@@ -111,7 +110,7 @@ const Dashboard: React.FC = () => {
             <button className={styles.learningButton}>備蓄品の確認</button>
           </div>
           <button className={styles.fullWidthButton}>もっと学ぶ</button>
-        </section>
+        </section> */}
 
         {/* 安否登録状況（家族・グループ）のサマリー */}
         <section className={styles.section}>
@@ -120,7 +119,7 @@ const Dashboard: React.FC = () => {
             <p>家族: {safetyStatus.family}</p>
             <p>グループ: {safetyStatus.group}</p>
           </div>
-          <button className={styles.fullWidthButton}>安否確認・登録へ</button>
+          <button onClick={() => clickNav("/settings")} className={styles.fullWidthButton}>安否確認・登録へ</button>
         </section>
 
         {/* システムからのお知らせ */}

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, CircleMarker 
 import 'leaflet/dist/leaflet.css';
 import L, { LatLng, Map as LeafletMap } from 'leaflet';
 import Openrouteservice from 'openrouteservice-js';
+import { dummy } from './dummy/dummy';
 import styles from './EvacuationRouteMap.module.css';
 
 // アイコン設定 (react-leaflet のデフォルトアイコン問題対応)
@@ -52,6 +53,8 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   const watchId = useRef<number | null>(null);
   const isNavigatingRef = useRef<boolean>(isNavigating);
 
+  const [userProfileCurrent, setUserProfileCurrent] = useState<RoutingProfile>(userProfile)
+
   useEffect(() => {
     isNavigatingRef.current = isNavigating;
   }, [isNavigating]);
@@ -76,7 +79,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
     }
   }, [apiKey]);
 
-  const calculateAndSetRoute = useCallback(async (start: LatLng, end: LatLng, profile: RoutingProfile) => {
+  const calculateAndSetRoute = useCallback(async (start: LatLng, end: LatLng, profile: RoutingProfile, dummy: L.LatLng[]) => {
     if (!ors) {
       setStatusMessage("エラー: 経路サービスが利用できません。");
       return;
@@ -87,6 +90,11 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
     }
 
     setStatusMessage("経路を検索中...");
+    if (dummy.length > 0) {
+      console.log(dummy)
+      setRoute(dummy);
+      return
+    }
     try {
       const response: OrsDirectionsResponse = await ors.calculate({
         coordinates: [
@@ -101,6 +109,8 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
         const routeCoordsGeoJSON = response.features[0].geometry.coordinates as number[][];
         const leafletRouteCoords: LatLng[] = routeCoordsGeoJSON.map(coord => new LatLng(coord[1], coord[0]));
         setRoute(leafletRouteCoords);
+        // console.log("my root");
+        // console.log(leafletRouteCoords);
         setIsOffRoute(false);
         setStatusMessage(isNavigating ? "経路を再設定しました。" : "経路が見つかりました。");
 
@@ -121,10 +131,10 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
 
 
   useEffect(() => {
-    if (startLocation && endLocation && userProfile && !isNavigating) {
-        calculateAndSetRoute(startLocation, endLocation, userProfile);
+    if (startLocation && endLocation && userProfileCurrent && !isNavigating) {
+        calculateAndSetRoute(startLocation, endLocation, userProfileCurrent, []);
     }
-  }, [startLocation, endLocation, userProfile, calculateAndSetRoute, isNavigating]);
+  }, [startLocation, endLocation, userProfileCurrent, calculateAndSetRoute, isNavigating]);
 
   const checkIfNearDestination = useCallback((currentPos: LatLng) => {
     if (!endLocation || !currentPos) return;
@@ -144,7 +154,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
   const startNavigation = () => {
     if (!route) {
       setStatusMessage("経路が設定されていません。まず経路を検索してください。");
-      calculateAndSetRoute(startLocation, endLocation, userProfile);
+      calculateAndSetRoute(startLocation, endLocation, userProfileCurrent, []);
       return;
     }
 
@@ -230,7 +240,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
       setIsOffRoute(true);
       setStatusMessage("ルートを外れました。経路を再検索します...");
       console.log("koko")
-      calculateAndSetRoute(currentPos, endLocation, userProfile);
+      calculateAndSetRoute(currentPos, endLocation, userProfileCurrent, []);
     } else {
       setIsOffRoute(false);
       if (!canCompleteEvacuation && isNavigating && !statusMessage.startsWith("経路を再設定しました。")) {
@@ -254,6 +264,18 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
     return null;
   };
 
+  useEffect(() => {
+    console.log("更新")
+    if (currentPosition && endLocation && userProfileCurrent) {
+        calculateAndSetRoute(currentPosition, endLocation, userProfileCurrent, []);
+    }
+  }, [userProfileCurrent]);
+
+  const handleImportDummy = () => {
+    const latLngs: L.LatLng[] = dummy.map(point => new L.LatLng(point.lat, point.lng));
+    calculateAndSetRoute(startLocation, endLocation, userProfileCurrent, latLngs);
+  }
+
 
   return (
     <div className={styles.evacuationMapContainer}>
@@ -276,6 +298,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             <button
               onClick={() => {
                 // ここに「車椅子ルート切替」のロジックを実装
+                setUserProfileCurrent("wheelchair");
                 alert('車椅子ルートへの切り替え機能を実装します。');
                 setIsMenuOpen(false); // メニューを閉じる
               }}
@@ -286,6 +309,7 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             <button
               onClick={() => {
                 // ここに「出発地を現在地に設定」のロジックを実装
+                setUserProfileCurrent("wheelchair");
                 alert('出発地を現在地に設定する機能を実装します。');
                 setIsMenuOpen(false);
               }}
@@ -293,7 +317,13 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
             >
               自転車ルート切替
             </button>
-            <button onClick={() => { alert('ダミーボタンです'); setIsMenuOpen(false); }} className={styles.subButton}>
+            <button
+              onClick={() => {
+                setUserProfileCurrent("foot-walking");
+                alert('徒歩ルートへの切り替え機能を実装します');
+                setIsMenuOpen(false);
+              }}
+              className={styles.subButton}>
               徒歩ルート切替
             </button>
           </div>

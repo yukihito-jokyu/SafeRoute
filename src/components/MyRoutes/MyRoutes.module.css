@@ -239,3 +239,133 @@
     padding-left: 0;
     color: #555;
 }
+
+/* モーダル用スタイル */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.selectField {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.routeDetails {
+  margin-bottom: 20px;
+}
+
+.routeDetails h4 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.routeDetails p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.mapPreviewContainer {
+  margin-top: 15px;
+}
+
+.mapPreviewContainer .mapPreview {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.sharedRoutesContainer {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.sharedRouteItem {
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.sharedRouteItem h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.sharedRouteItem p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.sharedRouteActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sharedRouteActions .actionButton {
+  flex: 1;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+.applied {
+  background-color: #6c757d !important;
+  cursor: not-allowed;
+}
+
+.applied:hover {
+  background-color: #6c757d !important;
+}

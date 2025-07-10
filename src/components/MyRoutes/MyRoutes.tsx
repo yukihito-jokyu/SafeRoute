@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './MyRoutes.module.css';
+import { useNavigate } from 'react-router-dom';
 
 // 仮のデータ型定義
 interface RouteInfo {
@@ -16,7 +17,7 @@ interface RouteInfo {
 }
 
 const mockRoutes: RouteInfo[] = [
-  { id: 'r001', name: '自宅から避難所Aへの最短路', distance: '1.8 km', estimatedTime: '22分', safetyRating: 4, createdAt: '2025/05/01', isMyRoute: true, shared: true, mapPreviewUrl: 'https://via.placeholder.com/300x150.png?text=Route+A+Map', userReports: ['街灯が少ない箇所あり'] },
+  { id: 'r001', name: '大学から避難所Aへの最短路', distance: '1.8 km', estimatedTime: '22分', safetyRating: 4, createdAt: '2025/05/01', isMyRoute: true, shared: true, mapPreviewUrl: 'https://via.placeholder.com/300x150.png?text=Route+A+Map', userReports: ['街灯が少ない箇所あり'] },
   { id: 'r002', name: '駅前から広域避難場所への道', distance: '3.2 km', estimatedTime: '40分', safetyRating: 3, createdAt: '2025/04/20', isMyRoute: false, shared: true, mapPreviewUrl: 'https://via.placeholder.com/300x150.png?text=Route+B+Map' },
   { id: 'r003', name: '裏山を通る近道（未検証）', distance: '1.2 km', estimatedTime: '18分', safetyRating: 2, createdAt: '2025/05/15', isMyRoute: false, shared: false, userReports: ['夜間は危険', '一部未舗装路'] },
 ];
@@ -40,7 +41,30 @@ const MyRoutes: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [showNewRouteForm, setShowNewRouteForm] = useState(false);
   const [newRouteName, setNewRouteName] = useState('');
-  // TODO: 他のルート編集用state
+  
+  // モーダル状態管理
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showSharedRoutesModal, setShowSharedRoutesModal] = useState(false);
+  const [selectedRoute, setSelectedRoute] = useState<RouteInfo | null>(null);
+  
+  // 編集用state
+  const [editingRoute, setEditingRoute] = useState<RouteInfo | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    memo: '',
+    safetyRating: 3
+  });
+  
+  // ポイント獲得申請状態
+  const [pointApplications, setPointApplications] = useState<string[]>([]);
+  
+  // 共有ルートのモックデータ
+  const [sharedRoutes] = useState<RouteInfo[]>([
+    { id: 'shared001', name: '商店街から避難所への安全ルート', distance: '2.3 km', estimatedTime: '28分', safetyRating: 5, createdAt: '2025/06/15', isMyRoute: false, shared: true, userReports: ['車いすでも通行可能', '夜間も明るい'] },
+    { id: 'shared002', name: '学校から公園への裏道', distance: '1.5 km', estimatedTime: '20分', safetyRating: 4, createdAt: '2025/06/10', isMyRoute: false, shared: true, userReports: ['住宅街を通る静かな道'] },
+    { id: 'shared003', name: '駅から市役所への直行ルート', distance: '3.8 km', estimatedTime: '45分', safetyRating: 3, createdAt: '2025/06/05', isMyRoute: false, shared: true }
+  ]);
 
   const toggleMyRoute = (routeId: string) => {
     setRoutes(prevRoutes =>
@@ -92,8 +116,85 @@ const MyRoutes: React.FC = () => {
       alert(`新規ルート「${newRouteName}」を保存しました。`);
   }
 
+  // 編集機能
+  const handleEditRoute = (route: RouteInfo) => {
+    setEditingRoute(route);
+    setEditForm({
+      name: route.name,
+      memo: route.userReports?.join(', ') || '',
+      safetyRating: route.safetyRating
+    });
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingRoute || !editForm.name.trim()) {
+      alert('ルート名を入力してください。');
+      return;
+    }
+    
+    setRoutes(prevRoutes =>
+      prevRoutes.map(r =>
+        r.id === editingRoute.id
+          ? {
+              ...r,
+              name: editForm.name,
+              safetyRating: editForm.safetyRating,
+              userReports: editForm.memo ? [editForm.memo] : undefined
+            }
+          : r
+      )
+    );
+    
+    setShowEditModal(false);
+    setEditingRoute(null);
+    alert('ルート情報を更新しました。');
+  };
+
+  // 詳細表示機能
+  const handleShowDetails = (route: RouteInfo) => {
+    setSelectedRoute(route);
+    setShowDetailsModal(true);
+  };
+
+  // ポイント獲得申請機能
+  const handlePointApplication = (routeId: string) => {
+    if (pointApplications.includes(routeId)) {
+      alert('このルートは既に申請済みです。');
+      return;
+    }
+    
+    setPointApplications(prev => [...prev, routeId]);
+    alert('ポイント獲得申請を送信しました。審査結果は後日通知されます。');
+  };
+
+  // 共有ルート閲覧機能
+  const handleViewSharedRoutes = () => {
+    setShowSharedRoutesModal(true);
+  };
+
+  // 共有ルートをマイルートに追加
+  const handleAddSharedToMyRoute = (sharedRoute: RouteInfo) => {
+    const newRoute: RouteInfo = {
+      ...sharedRoute,
+      id: `copied_${Date.now()}`,
+      isMyRoute: true,
+      shared: false,
+      createdAt: new Date().toISOString().split('T')[0].replace(/-/g, '/')
+    };
+    
+    setRoutes(prevRoutes => [newRoute, ...prevRoutes]);
+    alert(`「${sharedRoute.name}」をマイルートに追加しました。`);
+  };
+
   const myRegisteredRoutes = routes.filter(r => r.isMyRoute);
   const otherRoutes = routes.filter(r => !r.isMyRoute);
+
+  const navigate = useNavigate();
+
+  const clickNav = (path: string) => {
+    navigate(path);
+  }
 
 
   return (
@@ -142,7 +243,7 @@ const MyRoutes: React.FC = () => {
           <ul className={styles.routeList}>
             {myRegisteredRoutes.map(route => (
               <li key={route.id} className={styles.routeItem}>
-                <h3>{route.name}</h3>
+                <h3 onClick={() => clickNav("/viewroute")}>{route.name}</h3>
                 {route.mapPreviewUrl && <img src={route.mapPreviewUrl} alt={`${route.name} の地図プレビュー`} className={styles.mapPreview} />}
                 <p>距離: {route.distance} | 所要時間: {route.estimatedTime}</p>
                 <p>安全性評価: {'★'.repeat(route.safetyRating)}{'☆'.repeat(5 - route.safetyRating)}</p>
@@ -156,7 +257,7 @@ const MyRoutes: React.FC = () => {
                     </div>
                 )}
                 <div className={styles.routeActions}>
-                  <button className={styles.actionButton}>編集</button>
+                  <button onClick={() => handleEditRoute(route)} className={styles.actionButton}>編集</button>
                   <button onClick={() => toggleMyRoute(route.id)} className={styles.actionButton}>マイルート解除</button>
                   <button onClick={() => toggleShareRoute(route.id)} className={`${styles.actionButton} ${route.shared ? styles.unshare : styles.share}`}>
                     {route.shared ? '共有中 (解除)' : '匿名で共有'}
@@ -183,10 +284,16 @@ const MyRoutes: React.FC = () => {
                 <p>安全性評価: {'★'.repeat(route.safetyRating)}{'☆'.repeat(5 - route.safetyRating)}</p>
                 <p>登録日: {route.createdAt}</p>
                 <div className={styles.routeActions}>
-                  <button className={styles.actionButton}>詳細表示</button>
+                  <button onClick={() => handleShowDetails(route)} className={styles.actionButton}>詳細表示</button>
                   <button onClick={() => toggleMyRoute(route.id)} className={styles.actionButton}>マイルートに登録</button>
                   {/* ポイント獲得申請ボタンは条件に応じて表示 */}
-                  <button className={styles.actionButton}>ポイント獲得申請</button>
+                  <button 
+                    onClick={() => handlePointApplication(route.id)} 
+                    className={`${styles.actionButton} ${pointApplications.includes(route.id) ? styles.applied : ''}`}
+                    disabled={pointApplications.includes(route.id)}
+                  >
+                    {pointApplications.includes(route.id) ? '申請済み' : 'ポイント獲得申請'}
+                  </button>
                 </div>
               </li>
             ))}
@@ -195,7 +302,7 @@ const MyRoutes: React.FC = () => {
           <p>その他の記録済みルートはありません。</p>
         )}
         {/* TODO: 他のユーザーが共有したルートの検索・閲覧機能 */}
-        <button className={styles.fullWidthButton}>他のユーザーの共有ルートを見る</button>
+        <button onClick={handleViewSharedRoutes} className={styles.fullWidthButton}>他のユーザーの共有ルートを見る</button>
       </section>
 
       {/* ルート開拓ランキング */}
@@ -222,6 +329,127 @@ const MyRoutes: React.FC = () => {
             </tbody>
         </table>
       </section>
+
+      {/* 編集モーダル */}
+      {showEditModal && editingRoute && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>ルート編集</h3>
+            <div className={styles.formGroup}>
+              <label>ルート名:</label>
+              <input
+                type="text"
+                value={editForm.name}
+                onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                className={styles.inputField}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>安全性評価:</label>
+              <select
+                value={editForm.safetyRating}
+                onChange={(e) => setEditForm({...editForm, safetyRating: parseInt(e.target.value)})}
+                className={styles.selectField}
+              >
+                <option value={1}>★☆☆☆☆ (1)</option>
+                <option value={2}>★★☆☆☆ (2)</option>
+                <option value={3}>★★★☆☆ (3)</option>
+                <option value={4}>★★★★☆ (4)</option>
+                <option value={5}>★★★★★ (5)</option>
+              </select>
+            </div>
+            <div className={styles.formGroup}>
+              <label>メモ・注意事項:</label>
+              <textarea
+                value={editForm.memo}
+                onChange={(e) => setEditForm({...editForm, memo: e.target.value})}
+                className={styles.textareaField}
+                placeholder="危険箇所、注意事項などを記入してください..."
+              />
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={handleSaveEdit} className={styles.saveButton}>保存</button>
+              <button onClick={() => setShowEditModal(false)} className={styles.cancelButton}>キャンセル</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 詳細表示モーダル */}
+      {showDetailsModal && selectedRoute && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>ルート詳細</h3>
+            <div className={styles.routeDetails}>
+              <h4>{selectedRoute.name}</h4>
+              <p><strong>距離:</strong> {selectedRoute.distance}</p>
+              <p><strong>所要時間:</strong> {selectedRoute.estimatedTime}</p>
+              <p><strong>安全性評価:</strong> {'★'.repeat(selectedRoute.safetyRating)}{'☆'.repeat(5 - selectedRoute.safetyRating)}</p>
+              <p><strong>登録日:</strong> {selectedRoute.createdAt}</p>
+              <p><strong>共有状態:</strong> {selectedRoute.shared ? '共有中' : '非共有'}</p>
+              
+              {selectedRoute.userReports && selectedRoute.userReports.length > 0 && (
+                <div className={styles.userReports}>
+                  <strong>ユーザー報告:</strong>
+                  <ul>
+                    {selectedRoute.userReports.map((report, index) => (
+                      <li key={index}>{report}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {selectedRoute.mapPreviewUrl && (
+                <div className={styles.mapPreviewContainer}>
+                  <strong>地図プレビュー:</strong>
+                  <img src={selectedRoute.mapPreviewUrl} alt="地図プレビュー" className={styles.mapPreview} />
+                </div>
+              )}
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={() => setShowDetailsModal(false)} className={styles.cancelButton}>閉じる</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 共有ルート閲覧モーダル */}
+      {showSharedRoutesModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>他のユーザーの共有ルート</h3>
+            <div className={styles.sharedRoutesContainer}>
+              {sharedRoutes.map(route => (
+                <div key={route.id} className={styles.sharedRouteItem}>
+                  <h4>{route.name}</h4>
+                  <p>距離: {route.distance} | 所要時間: {route.estimatedTime}</p>
+                  <p>安全性評価: {'★'.repeat(route.safetyRating)}{'☆'.repeat(5 - route.safetyRating)}</p>
+                  <p>投稿日: {route.createdAt}</p>
+                  
+                  {route.userReports && route.userReports.length > 0 && (
+                    <div className={styles.userReports}>
+                      <strong>ユーザー報告:</strong>
+                      <ul>
+                        {route.userReports.map((report, index) => (
+                          <li key={index}>{report}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  <div className={styles.sharedRouteActions}>
+                    <button onClick={() => handleShowDetails(route)} className={styles.actionButton}>詳細表示</button>
+                    <button onClick={() => handleAddSharedToMyRoute(route)} className={styles.actionButton}>マイルートに追加</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={() => setShowSharedRoutesModal(false)} className={styles.cancelButton}>閉じる</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
