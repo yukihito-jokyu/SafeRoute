@@ -51,7 +51,7 @@ interface Testimonial {
 
 const TrainingMap: React.FC = () => {
   // --- モックデータ ---
-  const [currentPoints, setCurrentPoints] = useState<number>(1250);
+  const [currentPoints, setCurrentPoints] = useState<number>(15);
 
   const pointExchangeItems: PointExchangeItem[] = [
     { id: 'item1', name: '防災用ホイッスル', pointsRequired: 300, type: 'goods' },

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './MyRoutes.module.css';
+import { useNavigate } from 'react-router-dom';
 
 // 仮のデータ型定義
 interface RouteInfo {
@@ -16,7 +17,7 @@ interface RouteInfo {
 }
 
 const mockRoutes: RouteInfo[] = [
-  { id: 'r001', name: '自宅から避難所Aへの最短路', distance: '1.8 km', estimatedTime: '22分', safetyRating: 4, createdAt: '2025/05/01', isMyRoute: true, shared: true, mapPreviewUrl: 'https://via.placeholder.com/300x150.png?text=Route+A+Map', userReports: ['街灯が少ない箇所あり'] },
+  { id: 'r001', name: '大学から避難所Aへの最短路', distance: '1.8 km', estimatedTime: '22分', safetyRating: 4, createdAt: '2025/05/01', isMyRoute: true, shared: true, mapPreviewUrl: 'https://via.placeholder.com/300x150.png?text=Route+A+Map', userReports: ['街灯が少ない箇所あり'] },
   { id: 'r002', name: '駅前から広域避難場所への道', distance: '3.2 km', estimatedTime: '40分', safetyRating: 3, createdAt: '2025/04/20', isMyRoute: false, shared: true, mapPreviewUrl: 'https://via.placeholder.com/300x150.png?text=Route+B+Map' },
   { id: 'r003', name: '裏山を通る近道（未検証）', distance: '1.2 km', estimatedTime: '18分', safetyRating: 2, createdAt: '2025/05/15', isMyRoute: false, shared: false, userReports: ['夜間は危険', '一部未舗装路'] },
 ];
@@ -95,6 +96,12 @@ const MyRoutes: React.FC = () => {
   const myRegisteredRoutes = routes.filter(r => r.isMyRoute);
   const otherRoutes = routes.filter(r => !r.isMyRoute);
 
+  const navigate = useNavigate();
+
+  const clickNav = (path: string) => {
+    navigate(path);
+  }
+
 
   return (
     <div className={styles.pageContainer}>
@@ -142,7 +149,7 @@ const MyRoutes: React.FC = () => {
           <ul className={styles.routeList}>
             {myRegisteredRoutes.map(route => (
               <li key={route.id} className={styles.routeItem}>
-                <h3>{route.name}</h3>
+                <h3 onClick={() => clickNav("/viewroute")}>{route.name}</h3>
                 {route.mapPreviewUrl && <img src={route.mapPreviewUrl} alt={`${route.name} の地図プレビュー`} className={styles.mapPreview} />}
                 <p>距離: {route.distance} | 所要時間: {route.estimatedTime}</p>
                 <p>安全性評価: {'★'.repeat(route.safetyRating)}{'☆'.repeat(5 - route.safetyRating)}</p>
