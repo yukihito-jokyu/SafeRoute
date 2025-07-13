@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, CircleMarker 
 import 'leaflet/dist/leaflet.css';
 import L, { LatLng, Map as LeafletMap } from 'leaflet';
 import Openrouteservice from 'openrouteservice-js';
-import { dummy } from './dummy/dummy';
 import styles from './EvacuationRouteMap.module.css';
 
 // アイコン設定 (react-leaflet のデフォルトアイコン問題対応)
@@ -270,12 +269,6 @@ const EvacuationRouteMap: React.FC<EvacuationRouteMapProps> = ({
         calculateAndSetRoute(currentPosition, endLocation, userProfileCurrent, []);
     }
   }, [userProfileCurrent]);
-
-  const handleImportDummy = () => {
-    const latLngs: L.LatLng[] = dummy.map(point => new L.LatLng(point.lat, point.lng));
-    calculateAndSetRoute(startLocation, endLocation, userProfileCurrent, latLngs);
-  }
-
 
   return (
     <div className={styles.evacuationMapContainer}>
