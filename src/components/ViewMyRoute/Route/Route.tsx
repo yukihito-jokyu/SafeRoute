@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, CircleMarker } from 'react-leaflet';
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Popup, Polyline, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L, { LatLng, Map as LeafletMap } from 'leaflet';
-import Openrouteservice from 'openrouteservice-js';
 import { dummy } from '@/components/TrainingMap/EvacuationRouteMap/dummy/dummy';
 import styles from './Route.module.css';
 
@@ -15,33 +14,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-// --- 型定義 ---
-type RoutingProfile = 'foot-walking' | 'wheelchair'; // 避難訓練で想定されるプロファイル
-
-interface OrsFeature extends GeoJSON.Feature<GeoJSON.LineString | GeoJSON.Point> {
-  properties: any;
-}
-interface OrsDirectionsResponse extends GeoJSON.FeatureCollection<GeoJSON.LineString | GeoJSON.Point> {
-  features: OrsFeature[];
-  bbox?: GeoJSON.BBox;
-  metadata?: any;
-}
-
-interface EvacuationRouteMapProps {
-  startLocation: LatLng;      // 事前設定された開始地点
-  endLocation: LatLng;        // 事前設定された終了地点
-  userProfile: RoutingProfile;  // 事前設定されたユーザープロファイル
-  apiKey?: string;              // OpenRouteService APIキー
-}
-
-// OpenRouteServiceのインスタンス (APIキーが提供された場合に初期化)
-let ors: Openrouteservice.Directions | null = null;
 
 const Route: React.FC = () => {
   const apiKey: string | undefined = import.meta.env.VITE_REACT_APP_ORS_API_KEY;
-  const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
-  const [route, setRoute] = useState<LatLng[] | null>(dummy.map(point => new L.LatLng(point.lat, point.lng)));
-  const [mapInstance, setMapInstance] = useState<LeafletMap | null>(null);
+  const [currentPosition] = useState<LatLng | null>(null);
+  const [route] = useState<LatLng[] | null>(dummy.map(point => new L.LatLng(point.lat, point.lng)));
+  const [, setMapInstance] = useState<LeafletMap | null>(null);
 
   const MapInstanceSetter = () => {
     const map = useMap();
